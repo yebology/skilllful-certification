@@ -1,0 +1,28 @@
+package constant
+
+const (
+	ErrReadEnvFile              = "unable to read .env file"
+	ErrConnectingDatabase       = "unable to connect to database"
+	ErrPingDatabase             = "unable to ping database"
+	ErrGetSQLInstance           = "failed to get SQL DB instance"
+	ErrSeedingDatabase          = "unable to seed database"
+	ErrFetchDataWhileSeeding    = "unable to fetch data while seeding"
+	ErrResetTable               = "unable to reset database tables"
+	ErrMigrateDatabase          = "unable to migrate database tables"
+	ErrAllInputMustBeFilled     = "all input fields must be filled"
+	ErrInvalidCredentials       = "invalid credentials"
+	ErrParsingBody              = "unable to parsing and validate body"
+	ErrConvertNum               = "unable to convert id from param"
+	ErrCreateClass              = "error while create a new class"
+	ErrEditClass                = "error while edit a class"
+	ErrFetchClass               = "error while fetching class"
+	ErrDeleteClass              = "error while delete a class"
+	ErrAddParticipant           = "error while add a new participant"
+	ErrEditParticipant          = "error while edit a participant"
+	ErrFetchParticipant         = "error while fetching participant"
+	ErrDeleteParticipant        = "error while delete a participant"
+	ErrAssignParticipantToClass = "error while assign participant to class"
+	ErrFetchParticipantClass    = "error while fetch participant's class"
+	ErrFetchClassParticipants   = "error while fetch class participants"
+	ErrDeleteEnrollment         = "error while delete enrollment"
+)
