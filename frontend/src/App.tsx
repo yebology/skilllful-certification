@@ -6,6 +6,8 @@ import ParticipantList from "./pages/ParticipantList";
 import ParticipantDetail from "./pages/ParticipantDetail";
 import CreateClass from "./pages/CreateClass";
 import CreateParticipant from "./pages/CreateParticipant";
+import ClassParticipant from "./pages/ClassParticipant";
+import ParticipantClass from "./pages/ParticipantClass";
 
 function App() {
   return (
@@ -16,6 +18,14 @@ function App() {
           <Route path="/" element={<ClassList />} />
           <Route path="/classes/:id" element={<ClassDetail />} />
           <Route path="/classes/add" element={<CreateClass />} />
+          <Route
+            path="/enrollments/classes/:id"
+            element={<ClassParticipant />}
+          />
+          <Route
+            path="/enrollments/participants/:id"
+            element={<ParticipantClass />}
+          />
           <Route path="/participants" element={<ParticipantList />} />
           <Route path="/participants/add" element={<CreateParticipant />} />
           <Route path="/participants/:id" element={<ParticipantDetail />} />

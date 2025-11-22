@@ -1,31 +1,23 @@
 import { useEffect, useState } from "react";
-import { deleteClass, getAllClass } from "../server/class";
 import type { Class } from "../types/type";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteClassParticipant, getParticipantClass } from "../server/classParticipant";
 
-export default function ClassList() {
+export default function ParticipantClass() {
+    const { id } = useParams<{ id: string }>();
+    
   const [classes, setClasses] = useState<Class[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [showModal, setShowModal] = useState(false);
-  const [newClass, setNewClass] = useState({ name: "", category: "" });
-
   const navigate = useNavigate();
-
-  const handleCreate = () => {
-    if (!newClass.name || !newClass.category) return;
-    setClasses([...classes, { id: Date.now(), ...newClass }]);
-    setNewClass({ name: "", category: "" });
-    setShowModal(false);
-  };
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteClass(id);
-      alert("success delete class");
+      await deleteClassParticipant(id);
+      alert("success delete enrollments");
     } catch (err) {
-      alert("Failed to delete classes");
+      alert("Failed to delete enrollments");
       console.log(err);
     } finally {
       window.location.reload(); // reload seluruh halaman
@@ -35,7 +27,7 @@ export default function ClassList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAllClass();
+        const data = await getParticipantClass(Number(id));
         console.log(data);
         setClasses(data);
       } catch (err) {
@@ -62,14 +54,6 @@ export default function ClassList() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Classes</h1>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            navigate(`/classes/add`);
-          }}
-        >
-          + Add Class
-        </button>
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-lg bg-white">
@@ -91,23 +75,7 @@ export default function ClassList() {
                   <td className="px-6 py-4 text-black border-b">
                     {c.category}
                   </td>
-                  <td className="px-6 py-4 text-black border-b flex gap-2">
-                    <button
-                      className="btn btn-sm btn-ghost"
-                      onClick={() => {
-                        navigate(`/classes/` + c.id);
-                      }}
-                    >
-                      <h5 className="text-white">Detail</h5>
-                    </button>
-                    <button
-                      className="btn btn-sm btn-ghost"
-                      onClick={() => {
-                        navigate(`/enrollments/classes/` + c.id);
-                      }}
-                    >
-                      <h5 className="text-white">Participants</h5>
-                    </button>
+                  <td className="px-6 py-4 text-black border-b">
                     <button
                       className="btn btn-sm btn-error"
                       onClick={() => handleDelete(c.id)}

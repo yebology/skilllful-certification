@@ -27,3 +27,18 @@ export type ParticipantDetail = {
   phoneNumber: string;
   birthDate: string;
 };
+
+export type ClassParticipant = {
+  id: number;
+  participantId: number;
+  name: string;
+  email: string;
+  gender: string;
+};
+
+export type ParticipantClass = {
+  id: number;
+  classId: number;
+  name: string;
+  category: string;
+};

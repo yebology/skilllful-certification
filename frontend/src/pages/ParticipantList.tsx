@@ -61,7 +61,7 @@ export default function ParticipantList() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Classes</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Participants</h1>
         <button
           className="btn btn-primary"
           onClick={() => {
@@ -101,6 +101,14 @@ export default function ParticipantList() {
                       <h5 className="text-white">Detail</h5>
                     </button>
                     <button
+                      className="btn btn-sm btn-ghost"
+                      onClick={() => {
+                        navigate(`/enrollments/participants/` + c.id);
+                      }}
+                    >
+                      <h5 className="text-white">Classes</h5>
+                    </button>
+                    <button
                       className="btn btn-sm btn-error"
                       onClick={() => handleDelete(c.id)}
                     >
@@ -112,41 +120,6 @@ export default function ParticipantList() {
           </tbody>
         </table>
       </div>
-
-      {/* Modal */}
-      {showModal && (
-        <div className="modal modal-open">
-          <div className="modal-box max-w-md mx-auto">
-            <h3 className="font-bold text-xl mb-4">Add New Class</h3>
-            <input
-              type="text"
-              placeholder="Name"
-              className="input input-bordered w-full mb-3"
-              value={newClass.name}
-              onChange={(e) =>
-                setNewClass({ ...newClass, name: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              className="input input-bordered w-full mb-3"
-              value={newClass.category}
-              onChange={(e) =>
-                setNewClass({ ...newClass, category: e.target.value })
-              }
-            />
-            <div className="modal-action justify-end">
-              <button className="btn" onClick={() => setShowModal(false)}>
-                Cancel
-              </button>
-              <button className="btn btn-primary" onClick={handleCreate}>
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
