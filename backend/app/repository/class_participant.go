@@ -32,8 +32,8 @@ func (r *ClassParticipantRepository) FindByParticipantId(participantId int) ([]m
 	var classParticipants []model.ClassParticipant
 
 	err := r.db.Preload("Class.Category").
-		Find(&classParticipants).
 		Where(`participant_id = ?`, participantId).
+		Find(&classParticipants).
 		Error
 	if err != nil {
 		return []model.ClassParticipant{}, fmt.Errorf(constant.ErrFetchParticipantClass)
@@ -48,8 +48,8 @@ func (r *ClassParticipantRepository) FindByClassId(classId int) ([]model.ClassPa
 	var classParticipants []model.ClassParticipant
 
 	err := r.db.Preload("Participant.Gender").
-		Find(&classParticipants).
 		Where(`class_id = ?`, classId).
+		Find(&classParticipants).
 		Error
 	if err != nil {
 		return []model.ClassParticipant{}, fmt.Errorf(constant.ErrFetchClassParticipants)
