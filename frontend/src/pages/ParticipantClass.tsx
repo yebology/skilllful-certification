@@ -53,7 +53,7 @@ export default function ParticipantClass() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Classes</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Participant Classes</h1>
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-lg bg-white">
