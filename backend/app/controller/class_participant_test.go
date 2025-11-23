@@ -10,7 +10,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"github.com/yebology/skillful-certification/app/dto/request"
 	"github.com/yebology/skillful-certification/app/dto/response"
 	"github.com/yebology/skillful-certification/app/service"
@@ -30,14 +29,18 @@ func setupClassParticipantApp(mockService service.ClassParticipantServiceInterfa
 }
 
 func TestAssignParticipant_Success(t *testing.T) {
+	dto := request.AddClassParticipantDto{
+		ParticipantId: 1,
+		ClassId:       1,
+	}
+
 	mockService := &service.MockClassParticipantService{}
-	mockService.On("AssignParticipantService", mock.Anything).Return(nil)
+
+	mockService.On("AssignParticipantService", dto).Return(nil)
 
 	app := setupClassParticipantApp(mockService)
 
-	dto := request.AddClassParticipantDto{ParticipantId: 1, ClassId: 1}
 	body, _ := json.Marshal(dto)
-
 	req := httptest.NewRequest("POST", "/class-participant", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	resp, _ := app.Test(req)

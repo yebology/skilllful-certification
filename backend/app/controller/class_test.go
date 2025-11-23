@@ -10,7 +10,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"github.com/yebology/skillful-certification/app/dto/request"
 	"github.com/yebology/skillful-certification/app/dto/response"
 	"github.com/yebology/skillful-certification/app/service"
@@ -31,19 +30,20 @@ func setupClassApp(mockService *service.MockClassService) (*fiber.App, *ClassCon
 }
 
 func TestCreateClass_Success(t *testing.T) {
-	mockService := &service.MockClassService{ClassService: &service.ClassService{}}
-	mockService.On("CreateClassService", mock.Anything).Return(nil)
-
-	app, _ := setupClassApp(mockService)
-
 	dto := request.ClassDto{
 		Name:        "Test Class",
 		Description: "Test Description",
 		Instructor:  "John Doe",
 		CategoryId:  1,
 	}
-	body, _ := json.Marshal(dto)
 
+	mockService := &service.MockClassService{ClassService: &service.ClassService{}}
+
+	mockService.On("CreateClassService", dto).Return(nil)
+
+	app, _ := setupClassApp(mockService)
+
+	body, _ := json.Marshal(dto)
 	req := httptest.NewRequest("POST", "/class", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -74,19 +74,20 @@ func TestCreateClass_ErrorBodyInvalid(t *testing.T) {
 }
 
 func TestEditClass_Success(t *testing.T) {
-	mockService := &service.MockClassService{}
-	mockService.On("EditClassService", mock.Anything, mock.Anything).Return(nil)
-
-	app, _ := setupClassApp(mockService)
-
 	dto := request.ClassDto{
 		Name:        "Edited Class",
 		Description: "Updated Description",
 		Instructor:  "Jane Doe",
 		CategoryId:  2,
 	}
-	body, _ := json.Marshal(dto)
 
+	mockService := &service.MockClassService{}
+
+	mockService.On("EditClassService", 1, dto).Return(nil)
+
+	app, _ := setupClassApp(mockService)
+
+	body, _ := json.Marshal(dto)
 	req := httptest.NewRequest("PUT", "/class/1", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -123,7 +124,7 @@ func TestDeleteClass_NotFoundError(t *testing.T) {
 
 func TestGetClassDetail_Success(t *testing.T) {
 	mockService := &service.MockClassService{}
-	mockService.On("GetClassDetailService", mock.Anything).Return(response.ClassDetailDto{
+	mockService.On("GetClassDetailService", 1).Return(response.ClassDetailDto{
 		Id:          1,
 		Name:        "Test Class",
 		Description: "Test Description",

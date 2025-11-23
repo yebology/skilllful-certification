@@ -10,7 +10,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"github.com/yebology/skillful-certification/app/dto/request"
 	"github.com/yebology/skillful-certification/app/dto/response"
 	"github.com/yebology/skillful-certification/app/service"
@@ -30,11 +29,6 @@ func setupParticipantApp(mockService *service.MockParticipantService) *fiber.App
 }
 
 func TestAddParticipant_Success(t *testing.T) {
-	mockService := &service.MockParticipantService{}
-	mockService.On("AddParticipantService", mock.Anything).Return(nil)
-
-	app := setupParticipantApp(mockService)
-
 	dto := request.ParticipantDto{
 		Name:        "John Doe",
 		Email:       "john@example.com",
@@ -42,8 +36,14 @@ func TestAddParticipant_Success(t *testing.T) {
 		GenderId:    1,
 		PhoneNumber: "08123456789",
 	}
-	body, _ := json.Marshal(dto)
 
+	mockService := &service.MockParticipantService{}
+
+	mockService.On("AddParticipantService", dto).Return(nil)
+
+	app := setupParticipantApp(mockService)
+
+	body, _ := json.Marshal(dto)
 	req := httptest.NewRequest("POST", "/participant", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	resp, _ := app.Test(req)
@@ -137,11 +137,7 @@ func TestDeleteParticipant_NotFoundError(t *testing.T) {
 }
 
 func TestEditParticipant_Success(t *testing.T) {
-	mockService := &service.MockParticipantService{}
-	mockService.On("EditParticipantService", mock.Anything, mock.Anything).Return(nil)
-
-	app := setupParticipantApp(mockService)
-
+	participantID := 1
 	dto := request.ParticipantDto{
 		Name:        "John Edited",
 		Email:       "john@example.com",
@@ -149,11 +145,18 @@ func TestEditParticipant_Success(t *testing.T) {
 		GenderId:    1,
 		PhoneNumber: "08123456789",
 	}
-	body, _ := json.Marshal(dto)
 
-	req := httptest.NewRequest("PUT", "/participant/1", bytes.NewReader(body))
+	mockService := &service.MockParticipantService{}
+
+	mockService.On("EditParticipantService", participantID, dto).Return(nil)
+
+	app := setupParticipantApp(mockService)
+
+	body, _ := json.Marshal(dto)
+	req := httptest.NewRequest("PUT", fmt.Sprintf("/participant/%d", participantID), bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	resp, _ := app.Test(req)
+
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	mockService.AssertExpectations(t)
 }
