@@ -10,11 +10,11 @@ import (
 )
 
 type ClassController struct {
-	service *service.ClassService
+	service service.ClassServiceInterface
 }
 
-func NewClassController(service *service.ClassService) *ClassController {
-	return &ClassController{service: service}
+func NewClassController(s service.ClassServiceInterface) *ClassController {
+	return &ClassController{service: s}
 }
 
 func (con *ClassController) CreateClass(c *fiber.Ctx) error {
@@ -78,7 +78,7 @@ func (con *ClassController) GetClassDetail(c *fiber.Ctx) error {
 
 	class, err := con.service.GetClassDetailService(classId)
 	if err != nil {
-		return output.GetOutput(c, constant.StatusError, fiber.StatusInternalServerError, err.Error(), nil)
+		return output.GetOutput(c, constant.StatusError, fiber.StatusNotFound, err.Error(), nil)
 	}
 
 	return output.GetOutput(c, constant.StatusSuccess, fiber.StatusOK, constant.SuccessFetchClass, class)
@@ -94,7 +94,7 @@ func (con *ClassController) DeleteClass(c *fiber.Ctx) error {
 
 	err = con.service.DeleteClassService(classId)
 	if err != nil {
-		return output.GetOutput(c, constant.StatusError, fiber.StatusInternalServerError, err.Error(), nil)
+		return output.GetOutput(c, constant.StatusError, fiber.StatusNotFound, err.Error(), nil)
 	}
 
 	return output.GetOutput(c, constant.StatusSuccess, fiber.StatusOK, constant.SuccessDeleteClass, nil)

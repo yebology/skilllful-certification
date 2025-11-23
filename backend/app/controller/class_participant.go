@@ -10,10 +10,10 @@ import (
 )
 
 type ClassParticipantController struct {
-	service *service.ClassParticipantService
+	service service.ClassParticipantServiceInterface
 }
 
-func NewClassParticipantController(service *service.ClassParticipantService) *ClassParticipantController {
+func NewClassParticipantController(service service.ClassParticipantServiceInterface) *ClassParticipantController {
 	return &ClassParticipantController{service: service}
 }
 
@@ -44,7 +44,7 @@ func (con *ClassParticipantController) GetParticipantClass(c *fiber.Ctx) error {
 
 	classes, err := con.service.FetchParticipantClassService(participantId)
 	if err != nil {
-		return output.GetOutput(c, constant.StatusError, fiber.StatusInternalServerError, err.Error(), nil)
+		return output.GetOutput(c, constant.StatusError, fiber.StatusNotFound, err.Error(), nil)
 	}
 
 	return output.GetOutput(c, constant.StatusSuccess, fiber.StatusOK, constant.SuccessFetchParticipantClass, classes)
@@ -60,7 +60,7 @@ func (con *ClassParticipantController) GetClassParticipant(c *fiber.Ctx) error {
 
 	participants, err := con.service.FetchClassParticipantService(classId)
 	if err != nil {
-		return output.GetOutput(c, constant.StatusError, fiber.StatusInternalServerError, err.Error(), nil)
+		return output.GetOutput(c, constant.StatusError, fiber.StatusNotFound, err.Error(), nil)
 	}
 
 	return output.GetOutput(c, constant.StatusSuccess, fiber.StatusOK, constant.SuccessFetchClassParticipants, participants)
@@ -76,7 +76,7 @@ func (con *ClassParticipantController) DeleteClassParticipant(c *fiber.Ctx) erro
 
 	err = con.service.DeleteClassParticipantService(classParticipantId)
 	if err != nil {
-		return output.GetOutput(c, constant.StatusError, fiber.StatusInternalServerError, err.Error(), nil)
+		return output.GetOutput(c, constant.StatusError, fiber.StatusNotFound, err.Error(), nil)
 	}
 
 	return output.GetOutput(c, constant.StatusSuccess, fiber.StatusOK, constant.SuccessDeleteEnrollment, nil)

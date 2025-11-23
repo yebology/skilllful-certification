@@ -10,11 +10,11 @@ import (
 )
 
 type ParticipantController struct {
-	service *service.ParticipantService
+	service service.ParticipantServiceInterface
 }
 
-func NewParticipantController(service *service.ParticipantService) *ParticipantController {
-	return &ParticipantController{service: service}
+func NewParticipantController(s service.ParticipantServiceInterface) *ParticipantController {
+	return &ParticipantController{service: s}
 }
 
 func (con *ParticipantController) AddParticipant(c *fiber.Ctx) error {
@@ -94,7 +94,7 @@ func (con *ParticipantController) DeleteParticipant(c *fiber.Ctx) error {
 
 	err = con.service.DeleteParticipantService(participantId)
 	if err != nil {
-		return output.GetOutput(c, constant.StatusError, fiber.StatusInternalServerError, err.Error(), nil)
+		return output.GetOutput(c, constant.StatusError, fiber.StatusNotFound, err.Error(), nil)
 	}
 
 	return output.GetOutput(c, constant.StatusSuccess, fiber.StatusOK, constant.SuccessDeleteParticipant, nil)
